@@ -11,6 +11,8 @@
     "quotes": "off",
     "linebreak-style": ["error", "windows"],
     "object-curly-spacing": "off",
-    "require-jsdoc": "off"
+    "require-jsdoc": "off",
+    "operator-linebreak": "off",
+    "indent": "off"
   }
 }
