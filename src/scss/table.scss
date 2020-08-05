@@ -21,9 +21,60 @@
     border: 1px solid $border-color;
     background-color: #f8f9fa;
     border-top: none;
+    position: relative;
   }
+
+  .row-resize {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: $primery-color;
+    opacity: 0;
+
+
+    &:hover, &:active, {
+      opacity: 1;
+      cursor: row-resize;
+    }
+
+  }
+
   .row-data {
     display: flex;
+  }
+
+  .row-info, .column {
+    user-select: none;
+  }
+
+  .col-resize, .row-resize {
+    display: flex;
+    justify-content: center;
+    z-index: 1001;
+    &:active {
+      &:after {
+        content: "";
+        display: block;
+        background: $primery-color;
+        position: absolute;
+      }
+    }
+  }
+
+  .col-resize:active:after {
+    height: 5000px;
+    width: 1px;
+    z-index: 1000;
+    right: 0;
+  }
+
+  .row-resize:active:after {
+    height: 1px;
+    width: 5000px;
+    z-index: 1000;
+    bottom: 0;
   }
 
   .column {
@@ -37,6 +88,23 @@
     height: 100%;
     border-top: 0;
     border-left: 0;
+    position: relative;
+  }
+
+  .col-resize {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: $primery-color;
+    opacity: 0;
+    z-index: 1;
+
+    &:hover, &:active {
+      opacity: 1;
+      cursor: col-resize;
+    }
   }
 
   .cell {
@@ -53,7 +121,7 @@
 
     &.selected {
       border: none;
-      outline: 2px solid #3c74ff;
+      outline: 2px solid $primery-color;
       z-index: 2;
     }
   }
