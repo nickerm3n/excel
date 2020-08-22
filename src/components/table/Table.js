@@ -9,6 +9,10 @@ import {
   shouldResize,
   nextSelection,
 } from "@/components/table/table.functions";
+import * as actions from "@/redux/actions";
+import {defaultStyles} from "@/constants";
+import {changeStyles} from "@/redux/actions";
+import {parse} from "@core/parse";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -17,15 +21,25 @@ export class Table extends ExcelComponent {
     super($root, {
       name: "Table",
       listeners: ['mousedown', 'keydown', 'input'],
+      subscribe: ['colState', 'rowState'],
       ...options,
     });
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(event, this.$root);
+      this.$dispatch(actions.tableResize(data));
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(event, this.$root);
+      this.resizeTable(event)
     } else if (isCell(event)) {
-      this.selector.select($(event.target));
+      this.selectCell($(event.target));
       if (event.shiftKey) {
         document.onmousemove = (e) => {
           const $cells = matrix(this.selector.current, $(e.target))
@@ -60,33 +74,59 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selector.current.id(),
+      value,
+    }))
+  }
+
   onInput(event) {
-    this.$emit('table:input', $(event.target));
+    this.updateTextInStore($(event.target).text());
   }
 
   selectCell($cell) {
     this.selector.select($cell);
     this.$emit('table:select', $cell);
+    const styles = $cell.getStyles(Object.keys(defaultStyles));
+    this.$dispatch(changeStyles(styles));
   }
 
   prepare() {
     this.selector = new TableSelection();
   }
 
+  storeChanged(changes) {
+    console.log(changes)
+  }
+
   init() {
     super.init();
     const $cell = this.$root.find('[data-id="0:0"]');
     this.selectCell($cell);
-    this.$on('formula:input', (text)=> {
-      this.selector.current.text(text)
+
+    this.$on('formula:input', (value)=> {
+      this.selector.current
+        .attr('data-value', value)
+        .text(parse(value));
+      this.updateTextInStore(value)
     });
+
     this.$on('formula:focus', () => {
       this.selector.current.focus()
+    });
+
+    this.$on('toolbar:applyStyle', (value) => {
+      this.selector.applyStyle(value);
+      this.$dispatch(actions.applyStyles({
+        value,
+        ids: this.selector.selectedIds,
+      }))
     })
   }
 
   toHTML() {
-    return createTable();
+    return createTable(this.$getState());
   }
 }
 
