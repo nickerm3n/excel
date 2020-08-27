@@ -3,7 +3,7 @@ import {
   CHANGE_STYLES,
   CHANGE_TABLE_NAME,
   CHANGE_TEXT,
-  TABLE_RESIZE,
+  TABLE_RESIZE, UPDATE_DATE,
 } from "@/redux/types";
 
 export function rootReducer(state, action) {
@@ -25,7 +25,6 @@ export function rootReducer(state, action) {
       field = 'stylesState';
       const val = state[field] || {};
       action.data.ids.forEach((id) => {
-        // val[id] = toInlineStyles(action.data.value);
         val[id] = {...val[id], ...action.data.value}
       });
       return {
@@ -34,6 +33,8 @@ export function rootReducer(state, action) {
         currentStyles: {...state.currentStyles, ...action.data.value}};
     case CHANGE_TABLE_NAME:
       return {...state, tableName: action.data};
+    case UPDATE_DATE:
+      return {...state, lastUpdate: new Date().toJSON()};
     default: return state;
   }
 }

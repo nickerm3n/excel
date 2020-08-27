@@ -3,7 +3,7 @@ import {
   CHANGE_STYLES,
   CHANGE_TABLE_NAME,
   CHANGE_TEXT,
-  TABLE_RESIZE,
+  TABLE_RESIZE, UPDATE_DATE,
 } from "@/redux/types";
 
 export const tableResize = (data) => {
@@ -38,5 +38,11 @@ export const applyStyles = (data) => {
   return {
     type: APPLY_STYLE,
     data,
+  }
+};
+
+export const updateDate = () => {
+  return {
+    type: UPDATE_DATE,
   }
 };

@@ -47,3 +47,20 @@ export function debounce(f, ms) {
     setTimeout(() => isCooldown = false, ms);
   };
 }
+
+export function clone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+export function storageName(param) {
+  return `excel:` + param
+}
+
+export function getDate(date) {
+  const d = new Date(date);
+  return `${d.toLocaleDateString()} - ${d.toLocaleTimeString()}`
+}
+
+export function preventDefault(e) {
+  e.preventDefault()
+}
