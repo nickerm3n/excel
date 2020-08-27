@@ -75,6 +75,7 @@ export class Table extends ExcelComponent {
   }
 
   updateTextInStore(value) {
+    this.selector.current.updateDataValue(value);
     this.$dispatch(actions.changeText({
       id: this.selector.current.id(),
       value,

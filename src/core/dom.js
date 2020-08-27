@@ -71,6 +71,11 @@ class Dom {
     return this.$el.dataset;
   }
 
+  updateDataValue(value) {
+    this.$el.dataset.value = value;
+    return this;
+  }
+
   findAll(selector) {
     return this.$el.querySelectorAll(selector);
   }

@@ -26,7 +26,7 @@ function toColumn(colState) {
     <div class="column" 
         data-col=${index} 
         data-type="resizable"
-        style="width=${width}"
+        style="width:${width}"
         >
         ${col}
         <div class="col-resize" data-resize="col"></div>
